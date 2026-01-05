@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Getter
 @Setter
@@ -15,12 +18,20 @@ public class LabResult {
     private Long id;
 
     private String testName;
+    @Column(name = "result_file_url", length = 512)
     private String resultFileUrl;
     private LocalDate date;
 
+    // LabResult.java
     @ManyToOne
     @JoinColumn(name = "lab_id")
+    @JsonIgnoreProperties(value = { "results" }, allowSetters = true) // prevent lab->results->lab recursion
     private Lab lab;
+
+    @ManyToOne
+    @JoinColumn(name = "medical_history_id")
+    @JsonIgnoreProperties(value = { "labResults", "appointments" }, allowSetters = true)
+    private MedicalHistory medicalHistory;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -29,4 +40,5 @@ public class LabResult {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
+
 }

@@ -1,5 +1,8 @@
 package com.cc.project.Entity;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,9 +27,7 @@ public class User {
     private Role role;
 
     public enum Role {
-        ADMIN, CLIENT, DOCTOR,HOSPITALS,Labs,
+        ADMIN, CLIENT, DOCTOR, HOSPITALS, Labs,
     }
-
-
 
 }

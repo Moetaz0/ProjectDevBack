@@ -6,34 +6,46 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "appointment")
 public class Appointment {
 
-    // ===== Getters & Setters =====
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate date;
     private LocalTime time;
+    private String notes;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @JsonManagedReference
+    @JsonBackReference
     private User client;
-
     @ManyToOne
     @JoinColumn(name = "doctor_id")
+    @JsonBackReference
+    @JsonManagedReference
+    @JsonIgnore
     private Doctor doctor;
 
-    @OneToMany(mappedBy = "appointment")
-    private List<MedicalFile> files;
+    // Appointment.java
+    @ManyToOne
+    @JoinColumn(name = "medical_history_id")
+    @JsonIgnoreProperties(value = { "labResults", "appointments" }, allowSetters = true)
+    private MedicalHistory medicalHistory;
 
     public enum Status {
         PENDING,
@@ -65,7 +77,7 @@ public class Appointment {
         this.doctor = doctor;
     }
 
-    public void setFiles(List<MedicalFile> files) {
-        this.files = files;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

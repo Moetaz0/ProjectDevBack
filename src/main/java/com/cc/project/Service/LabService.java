@@ -27,6 +27,15 @@ public class LabService {
         return labRepository.save(lab);
     }
 
+    public Lab updateLab(Long id, Lab labDetails) {
+        return labRepository.findById(id).map(lab -> {
+            lab.setName(labDetails.getName());
+            lab.setSpecialty(labDetails.getSpecialty());
+            lab.setAddress(labDetails.getAddress());
+            return labRepository.save(lab);
+        }).orElseThrow(() -> new RuntimeException("Lab not found with id " + id));
+    }
+
     public void deleteLab(Long id) {
         labRepository.deleteById(id);
     }

@@ -28,6 +28,17 @@ public class DoctorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
+        return doctorService.getDoctorById(id)
+                .map(existingDoctor -> {
+                    doctor.setId(id);
+                    Doctor updatedDoctor = doctorService.saveDoctor(doctor);
+                    return ResponseEntity.ok(updatedDoctor);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public Doctor createDoctor(@RequestBody Doctor doctor) {
         return doctorService.saveDoctor(doctor);

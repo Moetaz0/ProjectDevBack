@@ -33,6 +33,11 @@ public class LabController {
         return labService.saveLab(lab);
     }
 
+    @PutMapping("/{id}")
+    public Lab updateLab(@PathVariable Long id, @RequestBody Lab labDetails) {
+        return labService.updateLab(id, labDetails);
+    }
+
     @GetMapping("/specialty/{specialty}")
     public List<Lab> getBySpecialty(@PathVariable String specialty) {
         return labService.findBySpecialty(specialty);
